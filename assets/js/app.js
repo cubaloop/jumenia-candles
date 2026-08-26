@@ -198,7 +198,7 @@ let hero3dInstance = null;
 
 // Initialize on DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
-  initHero3D();
+  setupHero3DCard();
   renderProducts();
   setupFiltersAndSearch();
   setupCartDrawer();
@@ -213,44 +213,45 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ----------------------------------------------------
    Hero 3D Candle Showcase
    ---------------------------------------------------- */
-function initHero3D() {
-  const canvasContainer = document.getElementById('hero-3d-wrapper');
-  if (!canvasContainer || typeof CandleShowcase === 'undefined') return;
+function setupHero3DCard() {
+  const card = document.getElementById('hero-3d-card');
+  if (!card) return;
 
-  hero3dInstance = new CandleShowcase('hero-3d-wrapper', {
-    candleType: 'jar',
-    waxColor: 0xF8EFE6,
-    jarColor: 0x301B13,
-    flameOn: true,
-    autoRotate: true
-  });
+  const handleMove = (clientX, clientY) => {
+    const rect = card.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -14;
+    const rotateY = ((x - centerX) / centerX) * 14;
+    card.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+  };
 
-  // Hero interactive button controls
-  const toggleFlameBtn = document.getElementById('hero-toggle-flame');
-  if (toggleFlameBtn) {
-    toggleFlameBtn.addEventListener('click', () => {
-      const isOn = hero3dInstance.toggleFlame();
-      toggleFlameBtn.innerHTML = isOn ? '<i class="fas fa-fire"></i> Flame ON' : '<i class="fas fa-fire-extinguisher"></i> Flame OFF';
-      toggleFlameBtn.classList.toggle('active', isOn);
-    });
-  }
-
-  const switchTypeBtn = document.getElementById('hero-toggle-type');
-  if (switchTypeBtn) {
-    const types = ['jar', 'bubble', 'ribbed'];
-    let currentIdx = 0;
-    switchTypeBtn.addEventListener('click', () => {
-      currentIdx = (currentIdx + 1) % types.length;
-      const t = types[currentIdx];
-      hero3dInstance.setCandleType(t);
-      switchTypeBtn.innerHTML = `<i class="fas fa-cube"></i> Model: ${t.toUpperCase()}`;
-    });
-  }
+  card.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+  card.addEventListener('mouseleave', () => { card.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
+  card.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
+  card.addEventListener('touchend', () => { card.style.transform = 'rotateX(0deg) rotateY(0deg)'; });
 }
 
-/* ----------------------------------------------------
-   Header Scroll Styling
-   ---------------------------------------------------- */
+function switchHeroProduct(productId) {
+  const product = PRODUCTS.find(p => p.id === productId);
+  if (!product) return;
+  const imgEl = document.getElementById('hero-featured-img');
+  const titleEl = document.getElementById('hero-featured-title');
+  const catEl = document.getElementById('hero-featured-cat');
+  const priceEl = document.getElementById('hero-featured-price');
+  if (imgEl) imgEl.src = product.image;
+  if (titleEl) titleEl.textContent = product.name;
+  if (catEl) catEl.textContent = product.categoryName;
+  if (priceEl) priceEl.textContent = product.price + ' AED';
+  const btns = document.querySelectorAll('.hero-thumb-btn');
+  btns.forEach(btn => btn.classList.remove('active'));
+  if (window.event && window.event.currentTarget) window.event.currentTarget.classList.add('active');
+}
+
 function setupHeaderScroll() {
   const header = document.querySelector('.site-header');
   window.addEventListener('scroll', () => {
@@ -595,21 +596,37 @@ function setup3DModal() {
   const modal = document.getElementById('modal-3d');
   const closeBtn = document.getElementById('close-3d-modal-btn');
   const overlay = document.getElementById('modal-3d-overlay');
-
   const closeModal = () => {
     modal.classList.remove('active');
     document.body.style.overflow = '';
   };
-
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
   if (overlay) overlay.addEventListener('click', closeModal);
+
+  const modalStage = document.getElementById('modal-photo-stage');
+  const modalImgCard = document.getElementById('modal-interactive-card');
+  if (modalStage && modalImgCard) {
+    modalStage.addEventListener('mousemove', (e) => {
+      const rect = modalStage.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -18;
+      const rotateY = ((x - centerX) / centerX) * 18;
+      modalImgCard.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.05)';
+    });
+    modalStage.addEventListener('mouseleave', () => {
+      modalImgCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  }
 }
 
 function open3DModal(productId) {
   const product = PRODUCTS.find(p => p.id === productId);
   if (!product) return;
-
   const modal = document.getElementById('modal-3d');
+  const imgEl = document.getElementById('modal-3d-img');
   const titleEl = document.getElementById('modal-3d-title');
   const catEl = document.getElementById('modal-3d-category');
   const priceEl = document.getElementById('modal-3d-price');
@@ -617,41 +634,23 @@ function open3DModal(productId) {
   const notesEl = document.getElementById('modal-3d-notes');
   const burnEl = document.getElementById('modal-3d-burn');
   const addBtn = document.getElementById('modal-3d-add-btn');
-
+  if (imgEl) imgEl.src = product.image;
   if (titleEl) titleEl.textContent = product.name;
   if (catEl) catEl.textContent = product.categoryName;
-  if (priceEl) priceEl.textContent = `${product.price} AED`;
+  if (priceEl) priceEl.textContent = product.price + ' AED';
   if (descEl) descEl.textContent = product.description;
   if (notesEl) notesEl.textContent = product.notes;
   if (burnEl) burnEl.textContent = product.burnTime;
-
   if (addBtn) {
     addBtn.onclick = () => {
       addToCart(product.id);
       modal.classList.remove('active');
     };
   }
-
-  // Initialize or re-create Three.js viewer in modal
-  const canvasContainer = document.getElementById('modal-3d-canvas-wrap');
-  canvasContainer.innerHTML = ''; // reset
-
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
-
-  setTimeout(() => {
-    modal3dInstance = new CandleShowcase('modal-3d-canvas-wrap', {
-      candleType: product.shape,
-      waxColor: product.color || 0xFDFBF7,
-      flameOn: true,
-      autoRotate: true
-    });
-  }, 100);
 }
 
-/* ----------------------------------------------------
-   Mobile Navigation Drawer
-   ---------------------------------------------------- */
 function setupMobileMenu() {
   const toggleBtn = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-nav-menu');

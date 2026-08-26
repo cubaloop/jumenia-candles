@@ -1,6 +1,6 @@
 /* ==========================================================================
    JUMENIA CANDLES (جومنيا) - Luxury Artisanal Candles Web Store
-   Clean Minimalist Design System with High-End Aesthetics
+   Clean Minimalist Design System with High-End Aesthetics & 3D Photo View
    ========================================================================== */
 
 :root {
@@ -10,9 +10,9 @@
   --color-surface-alt: #F4EFEA;
   --color-card-bg: #FFFFFF;
   
-  --color-primary: #2C1810;        /* Deep Espresso Bronze */
+  --color-primary: #2C1810;
   --color-primary-light: #4A2E20;
-  --color-accent: #C5A880;         /* Warm Gold Champagne */
+  --color-accent: #C5A880;
   --color-accent-dark: #A68758;
   --color-accent-soft: #F5EDE4;
   
@@ -38,7 +38,7 @@
   --shadow-md: 0 10px 25px -5px rgba(44, 24, 16, 0.07), 0 0 1px 1px rgba(44, 24, 16, 0.02);
   --shadow-lg: 0 20px 40px -10px rgba(44, 24, 16, 0.12), 0 0 1px 1px rgba(44, 24, 16, 0.03);
   --shadow-card: 0 12px 32px rgba(44, 24, 16, 0.06), 0 2px 6px rgba(44, 24, 16, 0.03);
-  --shadow-card-hover: 0 24px 48px -12px rgba(44, 24, 16, 0.14), 0 0 0 1px var(--color-accent);
+  --shadow-card-hover: 0 24px 48px -12px rgba(44, 24, 16, 0.15), 0 0 0 1px var(--color-accent);
   --shadow-drawer: -10px 0 40px rgba(0, 0, 0, 0.18);
 
   /* Border Radii */
@@ -57,7 +57,6 @@
   --max-width: 1280px;
 }
 
-/* Reset & Base Setup */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -112,12 +111,10 @@ input, select, textarea {
   padding: 0 1.5rem;
 }
 
-/* Typography Helpers */
 .font-serif { font-family: var(--font-serif); }
 .font-display { font-family: var(--font-display); }
 .arabic-text { font-family: var(--font-arabic); direction: rtl; }
 
-/* Top Announcement Bar */
 .announcement-bar {
   background: var(--color-primary);
   color: #FFFFFF;
@@ -139,7 +136,6 @@ input, select, textarea {
   gap: 0.4rem;
 }
 
-/* Main Navigation Header */
 .site-header {
   position: sticky;
   top: 0;
@@ -167,7 +163,6 @@ input, select, textarea {
   height: 100%;
 }
 
-/* Logo */
 .brand-logo-wrap {
   display: flex;
   align-items: center;
@@ -204,7 +199,6 @@ input, select, textarea {
   font-weight: 600;
 }
 
-/* Nav Links - Desktop */
 .nav-desktop {
   display: flex;
   align-items: center;
@@ -237,7 +231,6 @@ input, select, textarea {
   width: 100%;
 }
 
-/* Header Actions */
 .header-actions {
   display: flex;
   align-items: center;
@@ -284,7 +277,6 @@ input, select, textarea {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Hamburger Toggle Button */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -319,7 +311,6 @@ input, select, textarea {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Mobile Navigation Overlay */
 .mobile-nav-overlay {
   position: fixed;
   top: 0;
@@ -389,7 +380,6 @@ input, select, textarea {
   margin-bottom: 0.75rem;
 }
 
-/* Hero Section with 3D Candle Showcase */
 .hero-section {
   position: relative;
   padding: 3.5rem 0 5rem;
@@ -400,7 +390,7 @@ input, select, textarea {
 .hero-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 3rem;
+  gap: 3.5rem;
   align-items: center;
 }
 
@@ -520,65 +510,129 @@ input, select, textarea {
   line-height: 1.2;
 }
 
-/* 3D Hero Canvas Container */
-.hero-3d-wrapper {
+/* 3D Interactive Product Photo Card in Hero */
+.hero-photo-showcase-wrap {
+  perspective: 1200px;
   position: relative;
   width: 100%;
-  height: 480px;
-  background: radial-gradient(circle at center, #FFFFFF 0%, #F5ECE1 100%);
+}
+
+.hero-3d-photo-card {
+  position: relative;
+  background: #FFFFFF;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
   border: 1px solid var(--color-border);
-  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  padding: 2rem;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow var(--transition-smooth);
+  cursor: grab;
 }
 
-#hero-3d-canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+.hero-3d-photo-card:active {
+  cursor: grabbing;
 }
 
-.hero-3d-controls {
+.hero-3d-photo-card .shine-layer {
   position: absolute;
-  bottom: 1.25rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hero-photo-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  background: #FFFFFF;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(8px);
-  padding: 0.4rem 0.8rem;
-  border-radius: var(--radius-full);
+  justify-content: center;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transform: translateZ(30px);
+}
+
+.hero-photo-img-wrap img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 15px 25px rgba(44,24,16,0.12));
+}
+
+.hero-photo-floating-info {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-md);
-  z-index: 10;
-}
-
-.control-pill-btn {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-alt);
-  color: var(--color-primary);
+  transform: translateZ(50px);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: space-between;
+}
+
+.hero-photo-floating-info h4 {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-photo-floating-info .price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+}
+
+.hero-photo-thumbs {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.hero-thumb-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  background: #FFFFFF;
+  border: 2px solid var(--color-border);
+  padding: 4px;
+  cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.control-pill-btn:hover,
-.control-pill-btn.active {
-  background: var(--color-primary);
-  color: #FFFFFF;
+.hero-thumb-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.badge-3d-live {
+.hero-thumb-btn:hover,
+.hero-thumb-btn.active {
+  border-color: var(--color-accent-dark);
+  transform: scale(1.08);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge-3d-pill {
   position: absolute;
   top: 1.25rem;
   right: 1.25rem;
-  background: rgba(44, 24, 16, 0.85);
+  background: rgba(44, 24, 16, 0.88);
   color: #FFFFFF;
   padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
@@ -588,23 +642,10 @@ input, select, textarea {
   align-items: center;
   gap: 0.4rem;
   backdrop-filter: blur(4px);
+  transform: translateZ(60px);
+  z-index: 10;
 }
 
-.pulsing-dot {
-  width: 7px;
-  height: 7px;
-  background: #00E676;
-  border-radius: 50%;
-  animation: pulseDot 1.5s infinite;
-}
-
-@keyframes pulseDot {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
-  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(0, 230, 118, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
-}
-
-/* Section Common Styling */
 .section {
   padding: 5rem 0;
 }
@@ -638,7 +679,6 @@ input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* Catalog Filter & Search Bar */
 .catalog-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -706,11 +746,11 @@ input, select, textarea {
   color: var(--color-text-light);
 }
 
-/* Product Cards Grid - Clean, White, Elevated */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
+  perspective: 1000px;
 }
 
 .product-card {
@@ -722,11 +762,11 @@ input, select, textarea {
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow var(--transition-smooth), border-color var(--transition-smooth);
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
   box-shadow: var(--shadow-card-hover);
   border-color: var(--color-accent);
 }
@@ -746,6 +786,7 @@ input, select, textarea {
   letter-spacing: 0.05em;
   z-index: 2;
   box-shadow: var(--shadow-sm);
+  transform: translateZ(20px);
 }
 
 .card-3d-btn {
@@ -760,25 +801,26 @@ input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   z-index: 2;
   backdrop-filter: blur(4px);
+  transform: translateZ(25px);
   transition: all var(--transition-fast);
 }
 
 .card-3d-btn:hover {
   background: var(--color-accent-dark);
-  transform: scale(1.1);
+  transform: translateZ(30px) scale(1.1);
 }
 
-/* Image Container with Pure White Studio Canvas */
 .product-image-wrap {
   position: relative;
   width: 100%;
-  padding-top: 100%; /* 1:1 Aspect Ratio */
+  padding-top: 100%;
   background: #FFFFFF;
   overflow: hidden;
   border-bottom: 1px solid var(--color-border-subtle);
+  transform: translateZ(10px);
 }
 
 .product-image-wrap img {
@@ -793,15 +835,15 @@ input, select, textarea {
 }
 
 .product-card:hover .product-image-wrap img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-/* Product Info */
 .product-info {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  transform: translateZ(15px);
 }
 
 .product-category {
@@ -893,7 +935,6 @@ input, select, textarea {
   border-color: var(--color-primary);
 }
 
-/* 3D Interactive Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -921,7 +962,7 @@ input, select, textarea {
   background: #FFFFFF;
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 900px;
+  max-width: 950px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
@@ -963,17 +1004,60 @@ input, select, textarea {
   min-height: 520px;
 }
 
-.modal-canvas-wrap {
+.modal-photo-stage {
   position: relative;
   background: radial-gradient(circle at center, #FFFFFF 0%, #F5EDE4 100%);
-  min-height: 380px;
+  min-height: 420px;
   border-right: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  perspective: 1000px;
+  overflow: hidden;
 }
 
-#modal-3d-canvas {
+.modal-interactive-img-card {
+  position: relative;
+  background: #FFFFFF;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 50px rgba(44, 24, 16, 0.18);
+  border: 1px solid var(--color-border);
+  transform-style: preserve-3d;
+  cursor: grab;
+  max-width: 360px;
   width: 100%;
-  height: 100%;
+  transition: transform 0.1s ease-out;
+}
+
+.modal-interactive-img-card:active {
+  cursor: grabbing;
+}
+
+.modal-interactive-img-card img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
   display: block;
+}
+
+.modal-3d-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(44, 24, 16, 0.8);
+  color: #FFFFFF;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
 }
 
 .modal-info-wrap {
@@ -982,7 +1066,6 @@ input, select, textarea {
   flex-direction: column;
 }
 
-/* Shopping Cart Drawer */
 .cart-drawer-overlay {
   position: fixed;
   top: 0;
@@ -1184,7 +1267,6 @@ input, select, textarea {
   box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
 }
 
-/* WhatsApp Order Modal Form */
 .checkout-form {
   display: flex;
   flex-direction: column;
@@ -1222,7 +1304,6 @@ input, select, textarea {
   background: #FFFFFF;
 }
 
-/* Brand Story & Craftsmanship Section */
 .story-section {
   background: var(--color-surface-alt);
   padding: 5.5rem 0;
@@ -1270,7 +1351,6 @@ input, select, textarea {
   display: block;
 }
 
-/* Fragrance & Quality Pillars */
 .pillars-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -1320,7 +1400,6 @@ input, select, textarea {
   color: var(--color-text-muted);
 }
 
-/* Floating WhatsApp Action Button */
 .whatsapp-floating-btn {
   position: fixed;
   bottom: 2rem;
@@ -1367,7 +1446,6 @@ input, select, textarea {
   opacity: 1;
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   bottom: 2rem;
@@ -1398,7 +1476,6 @@ input, select, textarea {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* Site Footer */
 .site-footer {
   background: var(--color-primary);
   color: #FFFFFF;
@@ -1460,7 +1537,6 @@ input, select, textarea {
   color: #9B8E85;
 }
 
-/* Responsive Media Queries */
 @media (max-width: 992px) {
   .hero-grid,
   .story-grid {
@@ -1486,8 +1562,8 @@ input, select, textarea {
     display: flex;
   }
 
-  .hero-3d-wrapper {
-    height: 380px;
+  .hero-photo-img-wrap {
+    height: 300px;
   }
 
   .catalog-toolbar {
