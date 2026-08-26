@@ -71,7 +71,11 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg);
+  background-color: #FAF8F5;
+  background-image: url('../images/marble_bg.jpg');
+  background-repeat: repeat;
+  background-size: 1400px auto;
+  background-attachment: fixed;
   color: var(--color-text-main);
   line-height: 1.6;
   overflow-x: hidden;
@@ -151,12 +155,13 @@ input, select, textarea {
   left: 0;
   width: 100%;
   height: var(--header-height);
-  background: rgba(250, 248, 245, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border-subtle);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border);
   z-index: 100;
   transition: all var(--transition-smooth);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .site-header.scrolled {
@@ -392,8 +397,10 @@ input, select, textarea {
 .hero-section {
   position: relative;
   padding: 3.5rem 0 5rem;
-  background: radial-gradient(circle at 75% 30%, #F5EDE4 0%, var(--color-bg) 70%);
+  background: radial-gradient(circle at 75% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(250, 248, 245, 0.65) 70%);
+  backdrop-filter: blur(6px);
   overflow: hidden;
+  border-bottom: 1px solid var(--color-border-subtle);
 }
 
 .hero-grid {
@@ -528,7 +535,7 @@ input, select, textarea {
 
 .hero-3d-photo-card {
   position: relative;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-lg);
@@ -558,7 +565,7 @@ input, select, textarea {
   position: relative;
   width: 100%;
   height: 380px;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -617,7 +624,7 @@ input, select, textarea {
   width: 60px;
   height: 60px;
   border-radius: var(--radius-sm);
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   border: 2px solid var(--color-border);
   padding: 4px;
   cursor: pointer;
@@ -743,7 +750,7 @@ input, select, textarea {
 
 .catalog-search-box input:focus {
   border-color: var(--color-accent);
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
@@ -763,7 +770,7 @@ input, select, textarea {
 }
 
 .product-card {
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-subtle);
   box-shadow: var(--shadow-card);
@@ -832,7 +839,7 @@ input, select, textarea {
   position: relative;
   width: 100%;
   padding-top: 100%;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   overflow: hidden;
   border-bottom: 1px solid var(--color-border-subtle);
   transform: translateZ(10px);
@@ -859,7 +866,7 @@ input, select, textarea {
   flex-direction: column;
   flex-grow: 1;
   transform: translateZ(15px);
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
 }
 
 .product-category {
@@ -993,7 +1000,7 @@ input, select, textarea {
 }
 
 .modal-container {
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 950px;
@@ -1053,7 +1060,7 @@ input, select, textarea {
 
 .modal-interactive-img-card {
   position: relative;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   padding: 1.5rem;
   border-radius: var(--radius-md);
   box-shadow: 0 20px 50px rgba(44, 24, 16, 0.18);
@@ -1126,7 +1133,7 @@ input, select, textarea {
   width: 100%;
   max-width: 440px;
   height: 100vh;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   z-index: 260;
   box-shadow: var(--shadow-drawer);
   display: flex;
@@ -1190,7 +1197,7 @@ input, select, textarea {
   width: 70px;
   height: 70px;
   border-radius: var(--radius-sm);
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   border: 1px solid var(--color-border);
   object-fit: contain;
   padding: 4px;
@@ -1335,7 +1342,7 @@ input, select, textarea {
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--color-accent);
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
 }
 
 .story-section {
@@ -1353,7 +1360,7 @@ input, select, textarea {
 
 .story-image-card {
   position: relative;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   padding: 1.5rem;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
@@ -1393,7 +1400,7 @@ input, select, textarea {
 }
 
 .pillar-card {
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
   padding: 2rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
