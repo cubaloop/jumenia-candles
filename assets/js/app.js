@@ -318,9 +318,7 @@ function renderProducts() {
             <span class="price-currency">AED</span>
             <span class="price-amount">${product.price}</span>
           </div>
-          <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-            <i class="fas fa-shopping-bag"></i> Add to Cart
-          </button>
+          <button class="add-to-cart-btn icon-only" onclick="addToCart('${product.id}')" title="Add to Bag" aria-label="Add to Bag"><i class="fas fa-shopping-bag"></i></button>
         </div>
       </div>
     </div>
