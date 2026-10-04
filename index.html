@@ -18,12 +18,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <!-- Main Stylesheet -->
+  <!-- Supabase CDN Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
   <!-- Top Announcement Bar -->
-  <div class="announcement-bar">
+  <div class="announcement-bar" id="top-announcement-bar">
     <span><i class="fas fa-sparkles"></i> Hand-Poured in the UAE</span>
     <span>•</span>
     <span>100% Natural Soy & Botanical Wax</span>
@@ -56,6 +59,16 @@
 
       <!-- Header Actions -->
       <div class="header-actions">
+        <!-- Admin Dashboard Pill (Unlocked for Admin) -->
+        <button id="admin-header-pill" class="btn-admin-pill" onclick="openAdminDashboard()" style="display: none;" title="Open Admin Dashboard">
+          <i class="fas fa-crown"></i> Admin Panel
+        </button>
+
+        <!-- User / Admin Auth Trigger -->
+        <button class="icon-btn" id="open-auth-trigger" title="Account / Admin Login">
+          <i class="fas fa-user"></i>
+        </button>
+
         <!-- Direct WhatsApp Quick Chat -->
         <a href="https://wa.me/971526680498?text=Hello%20Jumenia%20Candles,%20I%20have%20an%20inquiry%20about%20your%20collection." target="_blank" class="icon-btn" title="Chat on WhatsApp">
           <i class="fab fa-whatsapp" style="color: #25D366; font-size: 1.25rem;"></i>
@@ -182,7 +195,7 @@
 
       <!-- Catalog Filter Bar -->
       <div class="catalog-toolbar">
-        <div class="filter-pills">
+        <div class="filter-pills" id="catalog-filter-pills">
           <button class="filter-btn active" data-filter="all">All Candles (12)</button>
           <button class="filter-btn" data-filter="jars">Luxury Jars</button>
           <button class="filter-btn" data-filter="centerpieces">Grand Centerpieces</button>
@@ -506,6 +519,408 @@
     </div>
   </div>
 
+  
+  <!-- User Authentication Modal (Login / Register / Admin) -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-container auth-modal-box">
+      <button class="modal-close-btn" id="close-auth-modal-btn">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <img src="assets/images/logo.jpg" alt="Jumenia" style="height: 48px; border-radius: 6px; margin: 0 auto 0.75rem;" />
+        <h3 style="font-family: var(--font-serif); font-size: 1.65rem; color: var(--color-primary); margin-bottom: 0.25rem;">
+          Jumenia Member & Admin Access
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted);">
+          Sign in to manage orders, customer profile, or access the store control center.
+        </p>
+      </div>
+
+      <div class="auth-tabs-nav">
+        <button class="auth-tab-btn active" data-tab="login">Sign In</button>
+        <button class="auth-tab-btn" data-tab="register">New Member</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form-body">
+        <div class="form-group">
+          <label for="login-email">Email Address or Admin ID</label>
+          <input type="text" id="login-email" required placeholder="e.g. admin@jumenia.com or your email" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required placeholder="Enter password (Admin: admin123)" />
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">
+          <i class="fas fa-lock"></i> Sign In to Account
+        </button>
+
+        <div style="background: var(--color-surface-alt); padding: 0.75rem 1rem; border-radius: var(--radius-sm); margin-top: 1rem; font-size: 0.78rem; color: var(--color-text-muted); border: 1px solid var(--color-border); text-align: center;">
+          ?? <strong>Admin Demo Login:</strong> <code>admin@jumenia.com</code> / <code>admin123</code>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form-body" style="display: none;">
+        <div class="form-group">
+          <label for="reg-name">Full Name *</label>
+          <input type="text" id="reg-name" required placeholder="e.g. Mariam Al Zaabi" />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email Address *</label>
+          <input type="email" id="reg-email" required placeholder="e.g. mariam@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">WhatsApp Number *</label>
+          <input type="tel" id="reg-phone" required placeholder="e.g. +971 50 987 6543" />
+        </div>
+        <div class="form-group">
+          <label for="reg-emirate">Emirate (UAE)</label>
+          <select id="reg-emirate">
+            <option value="Dubai">Dubai</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+            <option value="Sharjah">Sharjah</option>
+            <option value="Ajman">Ajman</option>
+            <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+            <option value="Fujairah">Fujairah</option>
+            <option value="Umm Al Quwain">Umm Al Quwain</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="reg-address">Default Delivery Address</label>
+          <input type="text" id="reg-address" placeholder="e.g. Downtown Dubai, Burj Vista Tower 1" />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Create Password *</label>
+          <input type="password" id="reg-password" required placeholder="????????" />
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">
+          <i class="fas fa-user-plus"></i> Create Member Profile
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- User Profile Modal -->
+  <div class="modal-overlay" id="user-profile-modal">
+    <div class="modal-container auth-modal-box">
+      <button class="modal-close-btn" onclick="document.getElementById('user-profile-modal').classList.remove('active'); document.body.style.overflow='';">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--color-surface-alt); border: 2px solid var(--color-accent); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--color-primary); margin: 0 auto 0.75rem;">
+          <i class="fas fa-user"></i>
+        </div>
+        <h3 id="profile-name" style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--color-primary); margin-bottom: 0.25rem;">Member Name</h3>
+        <span id="profile-role" class="admin-badge-cat" style="font-size: 0.8rem;">Customer</span>
+      </div>
+
+      <div style="background: var(--color-surface-alt); padding: 1rem 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-bottom: 1.5rem; font-size: 0.85rem;">
+        <p style="margin-bottom: 0.5rem;"><strong>Email:</strong> <span id="profile-email">email@example.com</span></p>
+        <div id="profile-customer-details">
+          <p style="margin-bottom: 0.5rem;"><strong>Phone:</strong> <span id="profile-phone">+971 ...</span></p>
+          <p style="margin-bottom: 0.5rem;"><strong>Emirate:</strong> <span id="profile-emirate">Dubai</span></p>
+          <p><strong>Address:</strong> <span id="profile-address">Address</span></p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button class="btn-primary" onclick="openAdminDashboard()" style="flex: 1;">
+          <i class="fas fa-crown"></i> Open Dashboard
+        </button>
+        <button class="btn-outline" onclick="logoutUser()" style="flex: 1; border-color: #D9534F; color: #D9534F;">
+          <i class="fas fa-sign-out-alt"></i> Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-Tab Admin Dashboard Modal -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-container admin-dashboard-container">
+      <div class="admin-dashboard-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <i class="fas fa-crown" style="font-size: 1.5rem; color: #A68758;"></i>
+          <div>
+            <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--color-primary); margin: 0;">
+              Jumenia Master Admin Dashboard
+            </h2>
+            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Real-time Cloud Control & Inventory Management</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button class="btn-admin-action" onclick="window.JumeniaCloud.syncFromSupabase(); showToast('?? Refreshing cloud sync...');" title="Force Cloud Sync">
+            <i class="fas fa-sync-alt"></i> Sync
+          </button>
+          <button class="modal-close-btn" id="close-admin-modal-btn" style="position: static;">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Tab Navigation -->
+      <div class="admin-tabs-bar">
+        <button class="admin-nav-tab active" data-admin-tab="products">
+          <i class="fas fa-fire"></i> Products CRUD
+        </button>
+        <button class="admin-nav-tab" data-admin-tab="categories">
+          <i class="fas fa-layer-group"></i> Categories
+        </button>
+        <button class="admin-nav-tab" data-admin-tab="announcements">
+          <i class="fas fa-bullhorn"></i> Announcements & Delivery
+        </button>
+        <button class="admin-nav-tab" data-admin-tab="orders">
+          <i class="fas fa-receipt"></i> Orders & WhatsApp Log
+        </button>
+        <button class="admin-nav-tab" data-admin-tab="supabase">
+          <i class="fas fa-cloud"></i> Supabase & Backup
+        </button>
+      </div>
+
+      <div class="admin-dashboard-body">
+        <!-- TAB 1: Products Management -->
+        <div class="admin-tab-pane active" id="admin-pane-products">
+          <div class="admin-pane-header">
+            <div style="display: flex; gap: 1rem; align-items: center; flex: 1; max-width: 420px;">
+              <input type="text" id="admin-product-search" placeholder="Search products..." oninput="renderAdminProductsTable()" style="width: 100%; padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" />
+            </div>
+            <button class="btn-primary" onclick="openAddProductModal()">
+              <i class="fas fa-plus"></i> Add New Candle
+            </button>
+          </div>
+
+          <div class="admin-table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Product Name & Burn Time</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-table-body">
+                <!-- Products rows injected by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Categories Management -->
+        <div class="admin-tab-pane" id="admin-pane-categories">
+          <div class="admin-pane-header">
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem;">Store Collections & Filter Categories</h3>
+          </div>
+
+          <form id="admin-category-form" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
+            <input type="text" id="admin-new-cat-name" required placeholder="e.g. Limited Holiday Edition / Oud Collection" style="flex: 1; padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" />
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-plus"></i> Add Category
+            </button>
+          </form>
+
+          <div class="admin-categories-grid" id="admin-categories-list">
+            <!-- Categories injected by admin.js -->
+          </div>
+        </div>
+
+        <!-- TAB 3: Announcements & Delivery -->
+        <div class="admin-tab-pane" id="admin-pane-announcements">
+          <form id="admin-announcements-form">
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Top Marquee Bar Announcements</h3>
+            <div id="admin-announcements-inputs" style="margin-bottom: 1rem;">
+              <!-- Inputs injected by admin.js -->
+            </div>
+            <button type="button" class="btn-outline" onclick="addAnnouncementLine()" style="margin-bottom: 2rem;">
+              <i class="fas fa-plus"></i> Add Announcement Line
+            </button>
+
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Delivery & WhatsApp Hotline Rules</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+              <div class="form-group">
+                <label for="admin-cfg-phone">WhatsApp Order Number</label>
+                <input type="text" id="admin-cfg-phone" required placeholder="971526680498" />
+              </div>
+              <div class="form-group">
+                <label for="admin-cfg-threshold">Free Shipping Min Order (AED)</label>
+                <input type="number" id="admin-cfg-threshold" required placeholder="200" />
+              </div>
+              <div class="form-group">
+                <label for="admin-cfg-fee">Standard UAE Delivery Fee (AED)</label>
+                <input type="number" id="admin-cfg-fee" required placeholder="20" />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <i class="fas fa-save"></i> Save Announcements & Delivery Rules
+            </button>
+          </form>
+        </div>
+
+        <!-- TAB 4: Orders & WhatsApp History -->
+        <div class="admin-tab-pane" id="admin-pane-orders">
+          <div class="admin-pane-header">
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem;">WhatsApp Orders & Ticket Inquiries Log</h3>
+          </div>
+
+          <div class="admin-table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Ref #</th>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Emirate</th>
+                  <th>Total</th>
+                  <th>Items Purchased</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-table-body">
+                <!-- Orders injected by admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 5: Supabase Cloud & Backup -->
+        <div class="admin-tab-pane" id="admin-pane-supabase">
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Supabase Cloud Integration</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.5rem;">
+            Link your Supabase PostgreSQL database for persistent real-time cloud storage across all devices.
+          </p>
+
+          <form id="admin-supabase-form" style="margin-bottom: 2rem;">
+            <div class="form-group">
+              <label for="admin-sb-url">Supabase Project URL</label>
+              <input type="text" id="admin-sb-url" placeholder="https://xyz.supabase.co" />
+            </div>
+            <div class="form-group">
+              <label for="admin-sb-key">Supabase Public Anon Key</label>
+              <input type="password" id="admin-sb-key" placeholder="eyJhbGciOi..." />
+            </div>
+
+            <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Save Credentials
+              </button>
+              <button type="button" class="btn-outline" onclick="testSupabaseConnection()">
+                <i class="fas fa-vial"></i> Test Connection
+              </button>
+            </div>
+            <div id="admin-sb-connection-status" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+          </form>
+
+          <hr style="border: 0; border-top: 1px solid var(--color-border); margin: 2rem 0;" />
+
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">One-Click Store Backup & Resguardo</h3>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <button type="button" class="btn-outline" onclick="downloadJSONBackup()">
+              <i class="fas fa-download"></i> Download Full JSON Backup
+            </button>
+            <label class="btn-outline" style="cursor: pointer;">
+              <i class="fas fa-upload"></i> Restore JSON Backup
+              <input type="file" accept=".json" onchange="restoreJSONBackup(event)" style="display: none;" />
+            </label>
+          </div>
+
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Supabase SQL Schema Script</h3>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
+            Copy and run this in your Supabase SQL Editor to create tables with Row Level Security:
+          </p>
+          <div style="position: relative;">
+            <button class="btn-admin-action" onclick="copySQLSchema()" style="position: absolute; top: 0.5rem; right: 0.5rem;">
+              <i class="fas fa-copy"></i> Copy SQL
+            </button>
+            <pre id="admin-sb-sql-code" class="admin-sql-viewer"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div class="modal-overlay" id="admin-product-edit-modal">
+    <div class="modal-container" style="max-width: 680px; padding: 2rem;">
+      <button class="modal-close-btn" onclick="document.getElementById('admin-product-edit-modal').classList.remove('active');">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <h3 id="admin-product-modal-title" style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--color-primary); margin-bottom: 1.5rem;">
+        Add New Artisanal Candle
+      </h3>
+
+      <form id="admin-product-form">
+        <input type="hidden" id="admin-prod-id" />
+        <input type="hidden" id="admin-prod-image-url" />
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="admin-prod-name">Candle Name *</label>
+            <input type="text" id="admin-prod-name" required placeholder="e.g. Royal Oud & Dark Amber Jar" />
+          </div>
+
+          <div class="form-group">
+            <label for="admin-prod-category">Category *</label>
+            <select id="admin-prod-category" required>
+              <!-- Populated by admin.js -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="admin-prod-price">Price (AED) *</label>
+            <input type="number" id="admin-prod-price" required placeholder="139" />
+          </div>
+
+          <div class="form-group">
+            <label for="admin-prod-burn">Burn Time</label>
+            <input type="text" id="admin-prod-burn" placeholder="55 Hours" />
+          </div>
+
+          <div class="form-group">
+            <label for="admin-prod-wax">Wax Type</label>
+            <input type="text" id="admin-prod-wax" placeholder="100% Organic Soy Wax" />
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="admin-prod-badge">Badge (Optional)</label>
+            <input type="text" id="admin-prod-badge" placeholder="Bestseller / Limited Edition / Signature" />
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="admin-prod-notes">Scent Notes</label>
+            <input type="text" id="admin-prod-notes" placeholder="e.g. Smoked Oud, Dark Amber, Madagascar Vanilla" />
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label for="admin-prod-desc">Description</label>
+            <textarea id="admin-prod-desc" rows="2" placeholder="Sensory artisan candle description..."></textarea>
+          </div>
+
+          <!-- Image Upload Dropzone with HTML5 Canvas Compressor -->
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Product Photo (Auto-compressed <50KB)</label>
+            <input type="file" id="admin-prod-image-file" accept="image/*" style="margin-bottom: 0.5rem;" />
+            <img id="admin-prod-img-preview" src="" alt="Preview" style="max-height: 120px; object-fit: contain; background: #FFFFFF; border-radius: 4px; border: 1px solid var(--color-border); display: none; padding: 4px;" />
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+          <button type="button" class="btn-outline" onclick="document.getElementById('admin-product-edit-modal').classList.remove('active');">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-save"></i> Save Candle Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Floating WhatsApp Direct Action Button -->
   <a href="https://wa.me/971526680498?text=Hello%20Jumenia%20Candles,%20I%20would%20like%20to%20inquire%20about%20your%20collection." target="_blank" class="whatsapp-floating-btn" aria-label="Direct WhatsApp Contact">
     <i class="fab fa-whatsapp"></i>
@@ -516,6 +931,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- Three.js Candle Engine -->
   <!-- Main Application Logic -->
+  <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/admin.js"></script>
   <script src="assets/js/app.js"></script>
 
 </body>
