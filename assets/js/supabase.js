@@ -172,15 +172,15 @@ const DEFAULT_CATEGORIES = [
 ];
 
 const DEFAULT_ANNOUNCEMENTS = [
-  '? Hand-Poured in the UAE',
+  '✨ Hand-Poured in the UAE',
   '100% Natural Soy & Botanical Wax',
   'Free UAE Delivery on Orders Over 200 AED',
-  'WhatsApp Hotline: +971 52668 0498'
+  'Artisanal Aromatherapy & Luxury Home Decor'
 ];
 
 const DEFAULT_CONFIG = {
   storeName: 'Jumenia Candles',
-  storeArabicName: '?????? ?????? ????????',
+  storeArabicName: 'جومنيا للشموع الطبيعية',
   whatsappPhone: '971526680498',
   freeShippingThreshold: 200,
   shippingFee: 20,

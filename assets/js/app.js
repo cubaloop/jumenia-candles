@@ -99,7 +99,7 @@ function renderAnnouncementBar() {
   if (!bar) return;
 
   const list = SITE_CONFIG.announcements || window.JumeniaCloud.DEFAULT_ANNOUNCEMENTS;
-  bar.innerHTML = list.map(item => `<span>${item}</span>`).join('<span>?</span>');
+  bar.innerHTML = list.map(item => `<span>${item}</span>`).join('<span> • </span>');
 }
 
 /* ----------------------------------------------------
@@ -230,7 +230,7 @@ function renderProducts() {
         
         <div class="product-meta">
           <span><i class="fas fa-fire"></i> ${product.burnTime || '50 Hours'}</span>
-          <span>?</span>
+          <span>•</span>
           <span><i class="fas fa-leaf"></i> ${product.waxType || 'Soy Wax'}</span>
         </div>
 

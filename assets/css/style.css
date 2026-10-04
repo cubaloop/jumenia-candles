@@ -470,6 +470,8 @@ input, select, textarea {
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
+  border: none;
+  cursor: pointer;
   box-shadow: 0 8px 20px rgba(44, 24, 16, 0.2);
   transition: all var(--transition-fast);
 }
