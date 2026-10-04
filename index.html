@@ -19,7 +19,7 @@
 
   <!-- Main Stylesheet -->
   <!-- Supabase CDN Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
@@ -639,7 +639,7 @@
     </div>
   </div>
 
-  <!-- 5-Tab Admin Dashboard Modal -->
+  <!-- 5-Tab Admin Dashboard Modal (En Espa?ol) -->
   <div class="modal-overlay" id="admin-modal">
     <div class="modal-container admin-dashboard-container">
       <div class="admin-dashboard-header">
@@ -647,14 +647,14 @@
           <i class="fas fa-crown" style="font-size: 1.5rem; color: #A68758;"></i>
           <div>
             <h2 style="font-family: var(--font-serif); font-size: 1.5rem; color: var(--color-primary); margin: 0;">
-              Jumenia Master Admin Dashboard
+              Panel de Administraci?n Jumenia
             </h2>
-            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Real-time Cloud Control & Inventory Management</span>
+            <span style="font-size: 0.75rem; color: var(--color-text-muted);">Control en la Nube y Gesti?n de Inventario en Tiempo Real</span>
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <button class="btn-admin-action" onclick="window.JumeniaCloud.syncFromSupabase(); showToast('?? Refreshing cloud sync...');" title="Force Cloud Sync">
-            <i class="fas fa-sync-alt"></i> Sync
+          <button class="btn-admin-action" onclick="window.JumeniaCloud.syncFromSupabase(); showToast('?? Sincronizando con la nube...');" title="Forzar Sincronizaci?n">
+            <i class="fas fa-sync-alt"></i> Sincronizar
           </button>
           <button class="modal-close-btn" id="close-admin-modal-btn" style="position: static;">
             <i class="fas fa-times"></i>
@@ -662,34 +662,34 @@
         </div>
       </div>
 
-      <!-- Admin Tab Navigation -->
+      <!-- Barra de Pesta?as del Administrador -->
       <div class="admin-tabs-bar">
         <button class="admin-nav-tab active" data-admin-tab="products">
-          <i class="fas fa-fire"></i> Products CRUD
+          <i class="fas fa-fire"></i> Productos (CRUD)
         </button>
         <button class="admin-nav-tab" data-admin-tab="categories">
-          <i class="fas fa-layer-group"></i> Categories
+          <i class="fas fa-layer-group"></i> Categor?as
         </button>
         <button class="admin-nav-tab" data-admin-tab="announcements">
-          <i class="fas fa-bullhorn"></i> Announcements & Delivery
+          <i class="fas fa-bullhorn"></i> Anuncios y Env?os
         </button>
         <button class="admin-nav-tab" data-admin-tab="orders">
-          <i class="fas fa-receipt"></i> Orders & WhatsApp Log
+          <i class="fas fa-receipt"></i> Pedidos y WhatsApp
         </button>
         <button class="admin-nav-tab" data-admin-tab="supabase">
-          <i class="fas fa-cloud"></i> Supabase & Backup
+          <i class="fas fa-cloud"></i> Supabase y Respaldo
         </button>
       </div>
 
       <div class="admin-dashboard-body">
-        <!-- TAB 1: Products Management -->
+        <!-- PESTA?A 1: Gesti?n de Productos -->
         <div class="admin-tab-pane active" id="admin-pane-products">
           <div class="admin-pane-header">
             <div style="display: flex; gap: 1rem; align-items: center; flex: 1; max-width: 420px;">
-              <input type="text" id="admin-product-search" placeholder="Search products..." oninput="renderAdminProductsTable()" style="width: 100%; padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" />
+              <input type="text" id="admin-product-search" placeholder="Buscar velas por nombre o aroma..." oninput="renderAdminProductsTable()" style="width: 100%; padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" />
             </div>
             <button class="btn-primary" onclick="openAddProductModal()">
-              <i class="fas fa-plus"></i> Add New Candle
+              <i class="fas fa-plus"></i> A?adir Nueva Vela
             </button>
           </div>
 
@@ -697,75 +697,75 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th>Product Name & Burn Time</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th style="text-align: right;">Actions</th>
+                  <th>Foto</th>
+                  <th>Nombre y Tiempo de Quemado</th>
+                  <th>Categor?a</th>
+                  <th>Precio</th>
+                  <th style="text-align: right;">Acciones</th>
                 </tr>
               </thead>
               <tbody id="admin-products-table-body">
-                <!-- Products rows injected by admin.js -->
+                <!-- Filas de productos inyectadas por admin.js -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- TAB 2: Categories Management -->
+        <!-- PESTA?A 2: Gesti?n de Categor?as -->
         <div class="admin-tab-pane" id="admin-pane-categories">
           <div class="admin-pane-header">
-            <h3 style="font-family: var(--font-serif); font-size: 1.3rem;">Store Collections & Filter Categories</h3>
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem;">Colecciones y Categor?as de Filtro</h3>
           </div>
 
           <form id="admin-category-form" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
-            <input type="text" id="admin-new-cat-name" required placeholder="e.g. Limited Holiday Edition / Oud Collection" style="flex: 1; padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" />
+            <input type="text" id="admin-new-cat-name" required placeholder="Ej. Edici?n Especial de Temporada / Colecci?n Oud" style="flex: 1; padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border);" />
             <button type="submit" class="btn-primary">
-              <i class="fas fa-plus"></i> Add Category
+              <i class="fas fa-plus"></i> A?adir Categor?a
             </button>
           </form>
 
           <div class="admin-categories-grid" id="admin-categories-list">
-            <!-- Categories injected by admin.js -->
+            <!-- Categor?as inyectadas por admin.js -->
           </div>
         </div>
 
-        <!-- TAB 3: Announcements & Delivery -->
+        <!-- PESTA?A 3: Anuncios y Env?os -->
         <div class="admin-tab-pane" id="admin-pane-announcements">
           <form id="admin-announcements-form">
-            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Top Marquee Bar Announcements</h3>
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">L?neas de Texto de la Barra Superior (Marquee)</h3>
             <div id="admin-announcements-inputs" style="margin-bottom: 1rem;">
-              <!-- Inputs injected by admin.js -->
+              <!-- Inputs inyectados por admin.js -->
             </div>
             <button type="button" class="btn-outline" onclick="addAnnouncementLine()" style="margin-bottom: 2rem;">
-              <i class="fas fa-plus"></i> Add Announcement Line
+              <i class="fas fa-plus"></i> A?adir L?nea de Anuncio
             </button>
 
-            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Delivery & WhatsApp Hotline Rules</h3>
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 1rem;">Reglas de Env?o y Tel?fono de WhatsApp</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
               <div class="form-group">
-                <label for="admin-cfg-phone">WhatsApp Order Number</label>
+                <label for="admin-cfg-phone">Tel?fono de Pedidos WhatsApp</label>
                 <input type="text" id="admin-cfg-phone" required placeholder="971526680498" />
               </div>
               <div class="form-group">
-                <label for="admin-cfg-threshold">Free Shipping Min Order (AED)</label>
+                <label for="admin-cfg-threshold">Monto M?nimo Env?o Gratis (AED)</label>
                 <input type="number" id="admin-cfg-threshold" required placeholder="200" />
               </div>
               <div class="form-group">
-                <label for="admin-cfg-fee">Standard UAE Delivery Fee (AED)</label>
+                <label for="admin-cfg-fee">Tarifa Est?ndar de Env?o UAE (AED)</label>
                 <input type="number" id="admin-cfg-fee" required placeholder="20" />
               </div>
             </div>
 
             <button type="submit" class="btn-primary">
-              <i class="fas fa-save"></i> Save Announcements & Delivery Rules
+              <i class="fas fa-save"></i> Guardar Anuncios y Reglas de Env?o
             </button>
           </form>
         </div>
 
-        <!-- TAB 4: Orders & WhatsApp History -->
+        <!-- PESTA?A 4: Historial de Pedidos y WhatsApp -->
         <div class="admin-tab-pane" id="admin-pane-orders">
           <div class="admin-pane-header">
-            <h3 style="font-family: var(--font-serif); font-size: 1.3rem;">WhatsApp Orders & Ticket Inquiries Log</h3>
+            <h3 style="font-family: var(--font-serif); font-size: 1.3rem;">Historial de Pedidos y Tickets de WhatsApp</h3>
           </div>
 
           <div class="admin-table-responsive">
@@ -773,43 +773,43 @@
               <thead>
                 <tr>
                   <th>Ref #</th>
-                  <th>Date</th>
-                  <th>Customer</th>
-                  <th>Emirate</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Emirato</th>
                   <th>Total</th>
-                  <th>Items Purchased</th>
+                  <th>Velas Compradas</th>
                 </tr>
               </thead>
               <tbody id="admin-orders-table-body">
-                <!-- Orders injected by admin.js -->
+                <!-- Pedidos inyectados por admin.js -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- TAB 5: Supabase Cloud & Backup -->
+        <!-- PESTA?A 5: Supabase Cloud y Respaldo -->
         <div class="admin-tab-pane" id="admin-pane-supabase">
-          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Supabase Cloud Integration</h3>
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Integraci?n con Supabase Cloud</h3>
           <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.5rem;">
-            Link your Supabase PostgreSQL database for persistent real-time cloud storage across all devices.
+            Conecta tu base de datos PostgreSQL de Supabase para almacenar y sincronizar productos y pedidos en tiempo real en todos los dispositivos.
           </p>
 
           <form id="admin-supabase-form" style="margin-bottom: 2rem;">
             <div class="form-group">
-              <label for="admin-sb-url">Supabase Project URL</label>
+              <label for="admin-sb-url">URL del Proyecto Supabase</label>
               <input type="text" id="admin-sb-url" placeholder="https://xyz.supabase.co" />
             </div>
             <div class="form-group">
-              <label for="admin-sb-key">Supabase Public Anon Key</label>
+              <label for="admin-sb-key">Clave P?blica Anon de Supabase</label>
               <input type="password" id="admin-sb-key" placeholder="eyJhbGciOi..." />
             </div>
 
             <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
               <button type="submit" class="btn-primary">
-                <i class="fas fa-save"></i> Save Credentials
+                <i class="fas fa-save"></i> Guardar Credenciales
               </button>
               <button type="button" class="btn-outline" onclick="testSupabaseConnection()">
-                <i class="fas fa-vial"></i> Test Connection
+                <i class="fas fa-vial"></i> Probar Conexi?n
               </button>
             </div>
             <div id="admin-sb-connection-status" style="margin-top: 1rem; font-size: 0.9rem;"></div>
@@ -817,24 +817,24 @@
 
           <hr style="border: 0; border-top: 1px solid var(--color-border); margin: 2rem 0;" />
 
-          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">One-Click Store Backup & Resguardo</h3>
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Resguardo de Seguridad en 1 Clic</h3>
           <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
             <button type="button" class="btn-outline" onclick="downloadJSONBackup()">
-              <i class="fas fa-download"></i> Download Full JSON Backup
+              <i class="fas fa-download"></i> Descargar Respaldo JSON Completo
             </button>
             <label class="btn-outline" style="cursor: pointer;">
-              <i class="fas fa-upload"></i> Restore JSON Backup
+              <i class="fas fa-upload"></i> Restaurar Respaldo JSON
               <input type="file" accept=".json" onchange="restoreJSONBackup(event)" style="display: none;" />
             </label>
           </div>
 
-          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Supabase SQL Schema Script</h3>
+          <h3 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem;">Script de Esquema SQL para Supabase</h3>
           <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
-            Copy and run this in your Supabase SQL Editor to create tables with Row Level Security:
+            Copia y ejecuta este script en el editor SQL de Supabase para crear las tablas necesarias:
           </p>
           <div style="position: relative;">
             <button class="btn-admin-action" onclick="copySQLSchema()" style="position: absolute; top: 0.5rem; right: 0.5rem;">
-              <i class="fas fa-copy"></i> Copy SQL
+              <i class="fas fa-copy"></i> Copiar SQL
             </button>
             <pre id="admin-sb-sql-code" class="admin-sql-viewer"></pre>
           </div>
@@ -843,7 +843,7 @@
     </div>
   </div>
 
-  <!-- Add/Edit Product Modal -->
+  <!-- Modal de A?adir / Editar Producto -->
   <div class="modal-overlay" id="admin-product-edit-modal">
     <div class="modal-container" style="max-width: 680px; padding: 2rem;">
       <button class="modal-close-btn" onclick="document.getElementById('admin-product-edit-modal').classList.remove('active');">
@@ -851,7 +851,7 @@
       </button>
 
       <h3 id="admin-product-modal-title" style="font-family: var(--font-serif); font-size: 1.6rem; color: var(--color-primary); margin-bottom: 1.5rem;">
-        Add New Artisanal Candle
+        A?adir Nueva Vela Artesanal
       </h3>
 
       <form id="admin-product-form">
@@ -860,68 +860,67 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group" style="grid-column: span 2;">
-            <label for="admin-prod-name">Candle Name *</label>
-            <input type="text" id="admin-prod-name" required placeholder="e.g. Royal Oud & Dark Amber Jar" />
+            <label for="admin-prod-name">Nombre de la Vela *</label>
+            <input type="text" id="admin-prod-name" required placeholder="Ej. Royal Oud & Dark Amber Jar" />
           </div>
 
           <div class="form-group">
-            <label for="admin-prod-category">Category *</label>
+            <label for="admin-prod-category">Categor?a *</label>
             <select id="admin-prod-category" required>
-              <!-- Populated by admin.js -->
+              <!-- Llenado por admin.js -->
             </select>
           </div>
 
           <div class="form-group">
-            <label for="admin-prod-price">Price (AED) *</label>
+            <label for="admin-prod-price">Precio (AED) *</label>
             <input type="number" id="admin-prod-price" required placeholder="139" />
           </div>
 
           <div class="form-group">
-            <label for="admin-prod-burn">Burn Time</label>
-            <input type="text" id="admin-prod-burn" placeholder="55 Hours" />
+            <label for="admin-prod-burn">Tiempo de Quemado</label>
+            <input type="text" id="admin-prod-burn" placeholder="55 Horas" />
           </div>
 
           <div class="form-group">
-            <label for="admin-prod-wax">Wax Type</label>
-            <input type="text" id="admin-prod-wax" placeholder="100% Organic Soy Wax" />
+            <label for="admin-prod-wax">Tipo de Cera</label>
+            <input type="text" id="admin-prod-wax" placeholder="100% Cera de Soya Org?nica" />
           </div>
 
           <div class="form-group" style="grid-column: span 2;">
-            <label for="admin-prod-badge">Badge (Optional)</label>
-            <input type="text" id="admin-prod-badge" placeholder="Bestseller / Limited Edition / Signature" />
+            <label for="admin-prod-badge">Insignia / Badge (Opcional)</label>
+            <input type="text" id="admin-prod-badge" placeholder="Bestseller / Edici?n Limitada / Signature" />
           </div>
 
           <div class="form-group" style="grid-column: span 2;">
-            <label for="admin-prod-notes">Scent Notes</label>
-            <input type="text" id="admin-prod-notes" placeholder="e.g. Smoked Oud, Dark Amber, Madagascar Vanilla" />
+            <label for="admin-prod-notes">Notas Olfativas y Esencias</label>
+            <input type="text" id="admin-prod-notes" placeholder="Ej. Oud Ahumado, ?mbar Oscuro, Vainilla de Madagascar" />
           </div>
 
           <div class="form-group" style="grid-column: span 2;">
-            <label for="admin-prod-desc">Description</label>
-            <textarea id="admin-prod-desc" rows="2" placeholder="Sensory artisan candle description..."></textarea>
+            <label for="admin-prod-desc">Descripci?n Detallada</label>
+            <textarea id="admin-prod-desc" rows="2" placeholder="Descripci?n sensorial de la vela..."></textarea>
           </div>
 
-          <!-- Image Upload Dropzone with HTML5 Canvas Compressor -->
+          <!-- Subida de Foto con Compresor Canvas -->
           <div class="form-group" style="grid-column: span 2;">
-            <label>Product Photo (Auto-compressed <50KB)</label>
+            <label>Foto del Producto (Comprimida autom?ticamente a <40KB)</label>
             <input type="file" id="admin-prod-image-file" accept="image/*" style="margin-bottom: 0.5rem;" />
-            <img id="admin-prod-img-preview" src="" alt="Preview" style="max-height: 120px; object-fit: contain; background: #FFFFFF; border-radius: 4px; border: 1px solid var(--color-border); display: none; padding: 4px;" />
+            <img id="admin-prod-img-preview" src="" alt="Vista previa" style="max-height: 120px; object-fit: contain; background: #FFFFFF; border-radius: 4px; border: 1px solid var(--color-border); display: none; padding: 4px;" />
           </div>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
           <button type="button" class="btn-outline" onclick="document.getElementById('admin-product-edit-modal').classList.remove('active');">
-            Cancel
+            Cancelar
           </button>
           <button type="submit" class="btn-primary">
-            <i class="fas fa-save"></i> Save Candle Product
+            <i class="fas fa-save"></i> Guardar Vela
           </button>
         </div>
       </form>
     </div>
   </div>
-
-  <!-- Floating WhatsApp Direct Action Button -->
+<!-- Floating WhatsApp Direct Action Button -->
   <a href="https://wa.me/971526680498?text=Hello%20Jumenia%20Candles,%20I%20would%20like%20to%20inquire%20about%20your%20collection." target="_blank" class="whatsapp-floating-btn" aria-label="Direct WhatsApp Contact">
     <i class="fab fa-whatsapp"></i>
     <span class="whatsapp-tooltip">Order / Chat on WhatsApp</span>
@@ -931,9 +930,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- Three.js Candle Engine -->
   <!-- Main Application Logic -->
-  <script src="assets/js/supabase.js"></script>
-  <script src="assets/js/admin.js"></script>
-  <script src="assets/js/app.js"></script>
+  <script src="assets/js/supabase.js" defer></script>
+  <script src="assets/js/admin.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
 
 </body>
 </html>

@@ -1,13 +1,13 @@
 /**
- * JUMENIA CANDLES - User Authentication & 5-Tab Admin Dashboard Controller
- * Tierra Querida Proven Architecture
+ * JUMENIA CANDLES - Controlador de Autenticaci?n de Usuarios y Panel de Administraci?n en Espa?ol
+ * Arquitectura de Doble Capa y Supabase Cloud (Tierra Querida)
  */
 
-// User & Auth State
+// Estado de Usuario y Pedidos
 let currentUser = JSON.parse(localStorage.getItem('jumenia_current_user') || 'null');
 let allOrders = JSON.parse(localStorage.getItem('jumenia_orders') || '[]');
 
-// Admin Module Initializer
+// Inicializador del M?dulo de Administraci?n
 function initAdminModule() {
   setupAuthModal();
   setupAdminDashboard();
@@ -15,7 +15,7 @@ function initAdminModule() {
 }
 
 // ----------------------------------------------------
-// 1. User Authentication (Customers + Admin)
+// 1. Autenticaci?n de Usuarios (Clientes + Admin)
 // ----------------------------------------------------
 function setupAuthModal() {
   const modal = document.getElementById('auth-modal');
@@ -59,30 +59,30 @@ function setupAuthModal() {
     });
   });
 
-  // Login Form Submission
+  // Env?o de Formulario de Inicio de Sesi?n
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
 
-      // Check Admin Credentials
+      // Verificaci?n de Credenciales de Administrador
       if ((email.toLowerCase() === 'admin@jumenia.com' && password === 'admin123') ||
           (email.toLowerCase() === 'admin' && password === 'admin')) {
         currentUser = {
           role: 'admin',
           email: 'admin@jumenia.com',
-          name: 'Master Admin'
+          name: 'Administrador Maestro'
         };
         localStorage.setItem('jumenia_current_user', JSON.stringify(currentUser));
         updateAuthUI();
         closeModal();
-        showToast('?? Welcome back, Master Administrator!');
+        showToast('?? ?Bienvenido de nuevo, Administrador Maestro!');
         openAdminDashboard();
         return;
       }
 
-      // Customer Login (from localStorage registered users)
+      // Inicio de sesi?n de Cliente (desde localStorage)
       const users = JSON.parse(localStorage.getItem('jumenia_registered_users') || '[]');
       const found = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
       
@@ -98,15 +98,14 @@ function setupAuthModal() {
         localStorage.setItem('jumenia_current_user', JSON.stringify(currentUser));
         updateAuthUI();
         closeModal();
-        showToast(`? Welcome back, ${currentUser.name}!`);
+        showToast(`? ?Bienvenido de nuevo, ${currentUser.name}!`);
       } else {
-        // Allow guest login or alert
-        alert('Invalid email or password. For Admin access use: admin@jumenia.com / admin123');
+        alert('Correo electr?nico o contrase?a incorrectos. Para acceso de Administrador usa: admin@jumenia.com / admin123');
       }
     });
   }
 
-  // Register Form Submission
+  // Env?o de Formulario de Registro
   if (registerForm) {
     registerForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -119,7 +118,7 @@ function setupAuthModal() {
 
       const users = JSON.parse(localStorage.getItem('jumenia_registered_users') || '[]');
       if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-        alert('An account with this email already exists.');
+        alert('Ya existe una cuenta registrada con este correo electr?nico.');
         return;
       }
 
@@ -132,7 +131,7 @@ function setupAuthModal() {
 
       updateAuthUI();
       closeModal();
-      showToast(`?? Account created! Welcome, ${name}!`);
+      showToast(`?? ?Cuenta creada con ?xito! Bienvenido, ${name}!`);
     });
   }
 }
@@ -180,7 +179,7 @@ function updateAuthUI() {
   } else {
     if (trigger) {
       trigger.innerHTML = '<i class="fas fa-user"></i>';
-      trigger.title = 'Account / Admin Login';
+      trigger.title = 'Cuenta / Acceso Administrador';
     }
     if (adminPill) adminPill.style.display = 'none';
   }
@@ -198,7 +197,7 @@ function logoutUser() {
   if (adminModal) adminModal.classList.remove('active');
   
   document.body.style.overflow = '';
-  showToast('?? You have been logged out.');
+  showToast('?? Has cerrado sesi?n.');
 }
 
 function showUserProfileModal() {
@@ -207,14 +206,14 @@ function showUserProfileModal() {
 
   document.getElementById('profile-name').textContent = currentUser.name;
   document.getElementById('profile-email').textContent = currentUser.email;
-  document.getElementById('profile-role').textContent = currentUser.role === 'admin' ? '?? Master Administrator' : '??? Valued Customer';
+  document.getElementById('profile-role').textContent = currentUser.role === 'admin' ? '?? Administrador Maestro' : '??? Cliente Registrado';
 
   const customerDetails = document.getElementById('profile-customer-details');
   if (currentUser.role === 'customer') {
     if (customerDetails) customerDetails.style.display = 'block';
-    document.getElementById('profile-phone').textContent = currentUser.phone || 'Not specified';
+    document.getElementById('profile-phone').textContent = currentUser.phone || 'No especificado';
     document.getElementById('profile-emirate').textContent = currentUser.emirate || 'Dubai';
-    document.getElementById('profile-address').textContent = currentUser.address || 'Not specified';
+    document.getElementById('profile-address').textContent = currentUser.address || 'No especificado';
   } else {
     if (customerDetails) customerDetails.style.display = 'none';
   }
@@ -224,7 +223,7 @@ function showUserProfileModal() {
 }
 
 // ----------------------------------------------------
-// 2. 5-Tab Admin Dashboard (Tierra Querida Architecture)
+// 2. Panel de Administraci?n de 5 Pesta?as (En Espa?ol)
 // ----------------------------------------------------
 let editingProductId = null;
 
@@ -252,7 +251,7 @@ function setupAdminDashboard() {
       const targetPane = document.getElementById(`admin-pane-${targetTab}`);
       if (targetPane) targetPane.classList.add('active');
 
-      // Refresh data on tab switch
+      // Actualizar datos al cambiar de pesta?a
       if (targetTab === 'products') renderAdminProductsTable();
       if (targetTab === 'categories') renderAdminCategoriesList();
       if (targetTab === 'announcements') renderAdminAnnouncementsForm();
@@ -261,28 +260,28 @@ function setupAdminDashboard() {
     });
   });
 
-  // Setup Product Image Compressor Dropzone
+  // Compresor de Im?genes en el Dropzone
   const imgInput = document.getElementById('admin-prod-image-file');
   const imgPreview = document.getElementById('admin-prod-img-preview');
   if (imgInput) {
     imgInput.addEventListener('change', async (e) => {
       if (e.target.files && e.target.files[0]) {
         try {
-          const compressedBase64 = await window.JumeniaCloud.compressImageFile(e.target.files[0], 800, 0.8);
+          const compressedBase64 = await window.JumeniaCloud.compressImageFile(e.target.files[0], 600, 0.82);
           document.getElementById('admin-prod-image-url').value = compressedBase64;
           if (imgPreview) {
             imgPreview.src = compressedBase64;
             imgPreview.style.display = 'block';
           }
-          showToast('?? Image compressed & prepared (<50KB)');
+          showToast('?? Foto comprimida autom?ticamente (<40KB)');
         } catch (err) {
-          alert('Failed to compress image: ' + err);
+          alert('Error al comprimir imagen: ' + err);
         }
       }
     });
   }
 
-  // Setup Product Save Form
+  // Guardar Producto
   const productForm = document.getElementById('admin-product-form');
   if (productForm) {
     productForm.addEventListener('submit', (e) => {
@@ -291,7 +290,7 @@ function setupAdminDashboard() {
     });
   }
 
-  // Setup Category Save Form
+  // Guardar Categor?a
   const catForm = document.getElementById('admin-category-form');
   if (catForm) {
     catForm.addEventListener('submit', (e) => {
@@ -300,7 +299,7 @@ function setupAdminDashboard() {
     });
   }
 
-  // Setup Announcements Save Form
+  // Guardar Anuncios y Env?os
   const annForm = document.getElementById('admin-announcements-form');
   if (annForm) {
     annForm.addEventListener('submit', (e) => {
@@ -309,7 +308,7 @@ function setupAdminDashboard() {
     });
   }
 
-  // Setup Supabase Settings Form
+  // Guardar Configuraci?n de Supabase
   const sbForm = document.getElementById('admin-supabase-form');
   if (sbForm) {
     sbForm.addEventListener('submit', (e) => {
@@ -338,7 +337,7 @@ function openAdminDashboard() {
 }
 
 // ----------------------------------------------------
-// TAB 1: Product Inventory CRUD
+// PESTA?A 1: Inventario de Productos (CRUD Completo)
 // ----------------------------------------------------
 function renderAdminProductsTable() {
   const container = document.getElementById('admin-products-table-body');
@@ -349,8 +348,8 @@ function renderAdminProductsTable() {
 
   const filtered = products.filter(p => 
     p.name.toLowerCase().includes(search) || 
-    p.categoryName.toLowerCase().includes(search) ||
-    p.notes.toLowerCase().includes(search)
+    (p.categoryName && p.categoryName.toLowerCase().includes(search)) ||
+    (p.notes && p.notes.toLowerCase().includes(search))
   );
 
   container.innerHTML = filtered.map(p => `
@@ -360,34 +359,34 @@ function renderAdminProductsTable() {
       </td>
       <td>
         <strong style="color: var(--color-primary);">${p.name}</strong>
-        <div style="font-size: 0.75rem; color: var(--color-text-muted);">${p.badge ? '??? ' + p.badge : ''} ? ?? ${p.burnTime}</div>
+        <div style="font-size: 0.75rem; color: var(--color-text-muted);">${p.badge ? '??? ' + p.badge : ''} ? ?? ${p.burnTime || '50 Horas'}</div>
       </td>
-      <td><span class="admin-badge-cat">${p.categoryName}</span></td>
+      <td><span class="admin-badge-cat">${p.categoryName || 'General'}</span></td>
       <td><strong style="color: var(--color-primary); font-size: 1.05rem;">${p.price} AED</strong></td>
       <td style="text-align: right; white-space: nowrap;">
-        <button class="btn-admin-action edit" onclick="editProductInAdmin('${p.id}')" title="Edit Candle">
-          <i class="fas fa-edit"></i> Edit
+        <button class="btn-admin-action edit" onclick="editProductInAdmin('${p.id}')" title="Editar Vela">
+          <i class="fas fa-edit"></i> Editar
         </button>
-        <button class="btn-admin-action delete" onclick="deleteProductInAdmin('${p.id}')" title="Delete Candle">
+        <button class="btn-admin-action delete" onclick="deleteProductInAdmin('${p.id}')" title="Eliminar Vela">
           <i class="fas fa-trash-alt"></i>
         </button>
       </td>
     </tr>
   `).join('');
 
-  // Populate category select in product modal
+  // Llenar selector de categor?as en modal de producto
   const catSelect = document.getElementById('admin-prod-category');
   if (catSelect) {
     const categories = window.getCategoriesState();
     catSelect.innerHTML = categories.filter(c => c.id !== 'all' && c.id !== 'under-50').map(c => `
       <option value="${c.id}">${c.name}</option>
-    `).join('') + '<option value="__custom__">+ Add Custom Category...</option>';
+    `).join('') + '<option value="__custom__">+ A?adir Nueva Categor?a Personalizada...</option>';
   }
 }
 
 function resetProductForm() {
   editingProductId = null;
-  document.getElementById('admin-product-modal-title').textContent = 'Add New Artisanal Candle';
+  document.getElementById('admin-product-modal-title').textContent = 'A?adir Nueva Vela Artesanal';
   document.getElementById('admin-product-form').reset();
   document.getElementById('admin-prod-id').value = '';
   document.getElementById('admin-prod-image-url').value = '';
@@ -409,13 +408,13 @@ function editProductInAdmin(productId) {
   if (!product) return;
 
   editingProductId = product.id;
-  document.getElementById('admin-product-modal-title').textContent = `Edit Candle: ${product.name}`;
+  document.getElementById('admin-product-modal-title').textContent = `Editar Vela: ${product.name}`;
   document.getElementById('admin-prod-id').value = product.id;
   document.getElementById('admin-prod-name').value = product.name;
   document.getElementById('admin-prod-category').value = product.category;
   document.getElementById('admin-prod-price').value = product.price;
-  document.getElementById('admin-prod-burn').value = product.burnTime || '50 Hours';
-  document.getElementById('admin-prod-wax').value = product.waxType || '100% Soy Wax';
+  document.getElementById('admin-prod-burn').value = product.burnTime || '55 Horas';
+  document.getElementById('admin-prod-wax').value = product.waxType || '100% Cera de Soya Org?nica';
   document.getElementById('admin-prod-badge').value = product.badge || '';
   document.getElementById('admin-prod-notes').value = product.notes || '';
   document.getElementById('admin-prod-desc').value = product.description || '';
@@ -434,11 +433,11 @@ async function saveProductFromAdmin() {
   const id = document.getElementById('admin-prod-id').value || `jum-${Date.now()}`;
   const name = document.getElementById('admin-prod-name').value.trim();
   let category = document.getElementById('admin-prod-category').value;
-  let categoryName = document.getElementById('admin-prod-category').selectedOptions[0]?.text || 'Luxury Candle';
+  let categoryName = document.getElementById('admin-prod-category').selectedOptions[0]?.text || 'Colecci?n de Lujo';
   
-  // Custom Category Handling
+  // Categor?a personalizada
   if (category === '__custom__') {
-    const customName = prompt('Enter new category name:');
+    const customName = prompt('Ingresa el nombre de la nueva categor?a:');
     if (!customName) return;
     category = customName.toLowerCase().replace(/[^a-z0-9]/g, '-');
     categoryName = customName;
@@ -446,8 +445,8 @@ async function saveProductFromAdmin() {
   }
 
   const price = Number(document.getElementById('admin-prod-price').value) || 49;
-  const burnTime = document.getElementById('admin-prod-burn').value.trim() || '50 Hours';
-  const waxType = document.getElementById('admin-prod-wax').value.trim() || '100% Soy Wax';
+  const burnTime = document.getElementById('admin-prod-burn').value.trim() || '50 Horas';
+  const waxType = document.getElementById('admin-prod-wax').value.trim() || '100% Cera de Soya';
   const badge = document.getElementById('admin-prod-badge').value.trim();
   const notes = document.getElementById('admin-prod-notes').value.trim();
   const description = document.getElementById('admin-prod-desc').value.trim();
@@ -467,32 +466,32 @@ async function saveProductFromAdmin() {
     image
   };
 
-  // 1. Update Local State
+  // 1. Guardar localmente
   window.saveProductState(productData);
 
-  // 2. Sync to Supabase Cloud
+  // 2. Sincronizar en la nube con Supabase
   await window.JumeniaCloud.saveProductToCloud(productData);
 
-  // 3. UI Update
+  // 3. Actualizar interfaz
   document.getElementById('admin-product-edit-modal').classList.remove('active');
   renderAdminProductsTable();
   window.renderProducts();
-  showToast(`? Product "${name}" saved and synced to cloud!`);
+  showToast(`? ?Producto "${name}" guardado y sincronizado!`);
 }
 
 async function deleteProductInAdmin(productId) {
-  if (!confirm('Are you sure you want to delete this candle product? This will sync locally and to Supabase.')) return;
+  if (!confirm('?Est?s seguro de eliminar este producto? La eliminaci?n se sincronizar? localmente y en Supabase.')) return;
 
   window.deleteProductState(productId);
   await window.JumeniaCloud.deleteProductFromCloud(productId);
 
   renderAdminProductsTable();
   window.renderProducts();
-  showToast('??? Product deleted and synced.');
+  showToast('??? Producto eliminado y sincronizado.');
 }
 
 // ----------------------------------------------------
-// TAB 2: Categories Engine
+// PESTA?A 2: Motor de Categor?as
 // ----------------------------------------------------
 function renderAdminCategoriesList() {
   const container = document.getElementById('admin-categories-list');
@@ -506,10 +505,10 @@ function renderAdminCategoriesList() {
         <span style="font-size: 0.75rem; color: var(--color-text-muted); display: block;">Slug: ${c.id}</span>
       </div>
       ${(c.id !== 'all' && c.id !== 'under-50') ? `
-        <button class="btn-admin-action delete" onclick="deleteCategoryInAdmin('${c.id}')" title="Delete Category">
+        <button class="btn-admin-action delete" onclick="deleteCategoryInAdmin('${c.id}')" title="Eliminar Categor?a">
           <i class="fas fa-trash-alt"></i>
         </button>
-      ` : '<span style="font-size: 0.75rem; color: var(--color-accent-dark); font-weight: 600;">System Protected</span>'}
+      ` : '<span style="font-size: 0.75rem; color: var(--color-accent-dark); font-weight: 600;">Protegida por el Sistema</span>'}
     </div>
   `).join('');
 }
@@ -527,22 +526,22 @@ async function saveCategoryFromAdmin() {
   document.getElementById('admin-new-cat-name').value = '';
   renderAdminCategoriesList();
   window.renderCategoryNav();
-  showToast(`? Category "${name}" added and synced!`);
+  showToast(`? ?Categor?a "${name}" a?adida y sincronizada!`);
 }
 
 async function deleteCategoryInAdmin(categoryId) {
-  if (!confirm('Are you sure you want to delete this category?')) return;
+  if (!confirm('?Est?s seguro de eliminar esta categor?a?')) return;
 
   window.deleteCategoryState(categoryId);
   await window.JumeniaCloud.deleteCategoryFromCloud(categoryId);
 
   renderAdminCategoriesList();
   window.renderCategoryNav();
-  showToast('??? Category deleted.');
+  showToast('??? Categor?a eliminada.');
 }
 
 // ----------------------------------------------------
-// TAB 3: Announcements, Banner & Shipping
+// PESTA?A 3: Anuncios, Marquee y Env?os
 // ----------------------------------------------------
 function renderAdminAnnouncementsForm() {
   const config = window.getConfigState();
@@ -556,7 +555,7 @@ function renderAdminAnnouncementsForm() {
     annContainer.innerHTML = list.map((msg, idx) => `
       <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
         <input type="text" class="admin-ann-item" value="${msg}" style="flex: 1;" />
-        <button type="button" class="btn-admin-action delete" onclick="this.parentElement.remove()" title="Remove line"><i class="fas fa-times"></i></button>
+        <button type="button" class="btn-admin-action delete" onclick="this.parentElement.remove()" title="Eliminar l?nea"><i class="fas fa-times"></i></button>
       </div>
     `).join('');
   }
@@ -568,7 +567,7 @@ function addAnnouncementLine() {
   const div = document.createElement('div');
   div.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem;';
   div.innerHTML = `
-    <input type="text" class="admin-ann-item" placeholder="e.g. ? New Collection Launched" style="flex: 1;" />
+    <input type="text" class="admin-ann-item" placeholder="Ej. ? Nueva Colecci?n Disponible" style="flex: 1;" />
     <button type="button" class="btn-admin-action delete" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
   `;
   annContainer.appendChild(div);
@@ -594,11 +593,11 @@ async function saveAnnouncementsFromAdmin() {
   await window.JumeniaCloud.saveConfigToCloud(newConfig);
 
   window.renderAnnouncementBar();
-  showToast('? Store announcements & delivery settings updated and synced!');
+  showToast('? Anuncios y reglas de env?o actualizados en vivo!');
 }
 
 // ----------------------------------------------------
-// TAB 4: Orders & WhatsApp Log
+// PESTA?A 4: Historial de Pedidos y WhatsApp
 // ----------------------------------------------------
 function renderAdminOrdersTable() {
   const container = document.getElementById('admin-orders-table-body');
@@ -606,7 +605,7 @@ function renderAdminOrdersTable() {
 
   const orders = JSON.parse(localStorage.getItem('jumenia_orders') || '[]');
   if (orders.length === 0) {
-    container.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No orders recorded yet. As customers order via WhatsApp tickets, they will automatically appear here.</td></tr>';
+    container.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--color-text-muted);">No hay pedidos registrados todav?a. A medida que los clientes compren por WhatsApp, aparecer?n aqu? autom?ticamente.</td></tr>';
     return;
   }
 
@@ -628,7 +627,7 @@ function renderAdminOrdersTable() {
 }
 
 // ----------------------------------------------------
-// TAB 5: Supabase Cloud & Resguardo Backup
+// PESTA?A 5: Supabase Cloud y Resguardo de Datos
 // ----------------------------------------------------
 function renderAdminSupabaseSettings() {
   const savedConfig = JSON.parse(localStorage.getItem('jumenia_supabase_config') || '{}');
@@ -643,30 +642,30 @@ function saveSupabaseSettingsFromAdmin() {
 
   localStorage.setItem('jumenia_supabase_config', JSON.stringify({ url, anonKey }));
   window.JumeniaCloud.initSupabase();
-  showToast('?? Supabase credentials saved locally!');
+  showToast('?? Credenciales de Supabase guardadas localmente!');
   testSupabaseConnection();
 }
 
 async function testSupabaseConnection() {
   const statusEl = document.getElementById('admin-sb-connection-status');
   if (!statusEl) return;
-  statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing connection to Supabase...';
+  statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Probando conexi?n con Supabase...';
 
   try {
     const client = window.JumeniaCloud.initSupabase();
     if (!client) {
-      statusEl.innerHTML = '<span style="color: #D9534F;"><i class="fas fa-exclamation-circle"></i> Supabase client not initialized. Check credentials.</span>';
+      statusEl.innerHTML = '<span style="color: #D9534F;"><i class="fas fa-exclamation-circle"></i> Cliente de Supabase no inicializado. Revisa las credenciales.</span>';
       return;
     }
 
     const { data, error } = await client.from('jumenia_products').select('count', { count: 'exact', head: true });
     if (error) {
-      statusEl.innerHTML = `<span style="color: #D9534F;"><i class="fas fa-exclamation-triangle"></i> Connected, but tables need creation: ${error.message}</span>`;
+      statusEl.innerHTML = `<span style="color: #D9534F;"><i class="fas fa-exclamation-triangle"></i> Conectado, pero las tablas requieren creaci?n: ${error.message}</span>`;
     } else {
-      statusEl.innerHTML = '<span style="color: #2E7D32;"><i class="fas fa-check-circle"></i> Connected to Supabase Successfully! Database is Live.</span>';
+      statusEl.innerHTML = '<span style="color: #2E7D32;"><i class="fas fa-check-circle"></i> ?Conectado a Supabase con ?xito! Base de datos activa.</span>';
     }
   } catch (err) {
-    statusEl.innerHTML = `<span style="color: #D9534F;"><i class="fas fa-times-circle"></i> Connection failed: ${err.message}</span>`;
+    statusEl.innerHTML = `<span style="color: #D9534F;"><i class="fas fa-times-circle"></i> Error de conexi?n: ${err.message}</span>`;
   }
 }
 
@@ -684,10 +683,10 @@ function downloadJSONBackup() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `jumenia-candles-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `jumenia-candles-respaldo-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast('?? Complete store backup JSON downloaded!');
+  showToast('?? ?Respaldo JSON completo descargado!');
 }
 
 function restoreJSONBackup(event) {
@@ -705,7 +704,7 @@ function restoreJSONBackup(event) {
 
       window.location.reload();
     } catch (err) {
-      alert('Invalid backup JSON file: ' + err.message);
+      alert('Archivo JSON no v?lido: ' + err.message);
     }
   };
   reader.readAsText(file);
@@ -713,11 +712,11 @@ function restoreJSONBackup(event) {
 
 function copySQLSchema() {
   navigator.clipboard.writeText(window.JumeniaCloud.SUPABASE_SQL_SCHEMA).then(() => {
-    showToast('?? Supabase SQL Schema copied to clipboard!');
+    showToast('?? ?Script SQL copiado al portapapeles!');
   });
 }
 
-// Export Admin Controller to Window
+// Exportar funciones globales
 window.initAdminModule = initAdminModule;
 window.openAdminDashboard = openAdminDashboard;
 window.openAddProductModal = openAddProductModal;
