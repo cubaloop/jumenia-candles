@@ -300,7 +300,7 @@ function addToCart(productId, qty = 1) {
 
   saveCart();
   updateCartUI();
-  showToast('? Added "' + product.name + '" to cart');
+  showToast('✨ Añadido "' + product.name + '" al carrito');
 }
 
 function updateCartQty(productId, delta) {
@@ -339,15 +339,35 @@ function updateCartUI() {
   const subtotalEl = document.getElementById('cart-subtotal');
   const deliveryEl = document.getElementById('cart-delivery');
   const totalEl = document.getElementById('cart-total');
+  const checkoutBtn = document.getElementById('proceed-checkout-btn');
 
   if (!container) return;
 
   if (cart.length === 0) {
-    container.innerHTML = '<div class="empty-cart-state"><i class="fas fa-shopping-bag empty-cart-icon"></i><h4 style="font-family: serif; font-size: 1.25rem; margin-bottom: 0.5rem;">Your bag is empty</h4><p style="font-size: 0.85rem;">Explore our artisanal candle collection and add your favorites.</p></div>';
+    container.innerHTML = `
+      <div class="empty-cart-state">
+        <i class="fas fa-shopping-bag empty-cart-icon"></i>
+        <h4 style="font-family: var(--font-serif); font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--color-primary);">Tu bolsa está vacía</h4>
+        <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.25rem;">Explora nuestra colección de velas artesanales y añade tus favoritas.</p>
+        <button class="btn-primary" onclick="document.getElementById('cart-drawer').classList.remove('active');document.getElementById('cart-drawer-overlay').classList.remove('active');document.body.style.overflow='';" style="padding: 0.65rem 1.4rem; font-size: 0.85rem; width: auto; margin: 0 auto; display: inline-flex;">
+          <i class="fas fa-search"></i> Explorar Colección
+        </button>
+      </div>`;
     if (subtotalEl) subtotalEl.textContent = '0 AED';
     if (deliveryEl) deliveryEl.textContent = '0 AED';
     if (totalEl) totalEl.textContent = '0 AED';
+    if (checkoutBtn) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.style.opacity = '0.55';
+      checkoutBtn.style.cursor = 'not-allowed';
+    }
     return;
+  }
+
+  if (checkoutBtn) {
+    checkoutBtn.disabled = false;
+    checkoutBtn.style.opacity = '1';
+    checkoutBtn.style.cursor = 'pointer';
   }
 
   container.innerHTML = cart.map(item => `
@@ -357,12 +377,12 @@ function updateCartUI() {
         <h4>${item.name}</h4>
         <div class="cart-item-price">${item.price} AED</div>
         <div class="cart-qty-controls">
-          <button class="qty-btn" onclick="updateCartQty('${item.id}', -1)">-</button>
+          <button class="qty-btn" onclick="updateCartQty('${item.id}', -1)" aria-label="Disminuir cantidad">-</button>
           <span class="qty-count">${item.qty}</span>
-          <button class="qty-btn" onclick="updateCartQty('${item.id}', 1)">+</button>
+          <button class="qty-btn" onclick="updateCartQty('${item.id}', 1)" aria-label="Aumentar cantidad">+</button>
         </div>
       </div>
-      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')" title="Remove">
+      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')" title="Eliminar del carrito" aria-label="Eliminar">
         <i class="fas fa-trash-alt"></i>
       </button>
     </div>
@@ -376,7 +396,7 @@ function updateCartUI() {
   const total = subtotal + delivery;
 
   if (subtotalEl) subtotalEl.textContent = subtotal + ' AED';
-  if (deliveryEl) deliveryEl.textContent = delivery === 0 ? `FREE (Orders > ${threshold} AED)` : `${delivery} AED`;
+  if (deliveryEl) deliveryEl.textContent = delivery === 0 ? `GRATIS (> ${threshold} AED)` : `${delivery} AED`;
   if (totalEl) totalEl.textContent = total + ' AED';
 }
 
@@ -416,7 +436,7 @@ function setupCheckoutModal() {
   if (openCheckoutBtn) {
     openCheckoutBtn.addEventListener('click', () => {
       if (cart.length === 0) {
-        showToast('?? Please add at least one candle to your bag.');
+        showToast('⚠️ Por favor añade al menos una vela a tu bolsa.');
         return;
       }
       document.getElementById('cart-drawer').classList.remove('active');
@@ -428,9 +448,13 @@ function setupCheckoutModal() {
       const delivery = subtotal >= threshold ? 0 : shippingFee;
       const total = subtotal + delivery;
       
-      document.getElementById('checkout-summary-subtotal').textContent = subtotal + ' AED';
-      document.getElementById('checkout-summary-delivery').textContent = delivery === 0 ? 'FREE' : `${delivery} AED`;
-      document.getElementById('checkout-summary-total').textContent = total + ' AED';
+      const summarySubtotal = document.getElementById('checkout-summary-subtotal');
+      const summaryDelivery = document.getElementById('checkout-summary-delivery');
+      const summaryTotal = document.getElementById('checkout-summary-total');
+
+      if (summarySubtotal) summarySubtotal.textContent = subtotal + ' AED';
+      if (summaryDelivery) summaryDelivery.textContent = delivery === 0 ? 'GRATIS' : `${delivery} AED`;
+      if (summaryTotal) summaryTotal.textContent = total + ' AED';
 
       // Auto-fill logged-in customer info if available
       const loggedUser = JSON.parse(localStorage.getItem('jumenia_current_user') || 'null');
@@ -442,6 +466,7 @@ function setupCheckoutModal() {
       }
 
       modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
     });
   }
 
@@ -469,7 +494,7 @@ async function sendWhatsAppTicket() {
   const notes = document.getElementById('cust-notes').value.trim();
 
   if (!name || !phone || !address) {
-    alert('Please fill in your name, phone number, and delivery address.');
+    alert('Por favor completa tu nombre, teléfono y dirección de entrega.');
     return;
   }
 
@@ -505,30 +530,30 @@ async function sendWhatsAppTicket() {
   }
 
   // 2. Build WhatsApp Ticket Message
-  let ticket = '??? *ORDER CONFIRMATION - JUMENIA CANDLES* ???\n';
-  ticket += '?? *Order Ref:* #' + refNumber + '\n';
-  ticket += '?? *Date:* ' + new Date().toLocaleDateString('en-GB') + '\n';
-  ticket += '??????????????????????\n';
-  ticket += '?? *Customer:* ' + name + '\n';
-  ticket += '?? *Phone:* ' + phone + '\n';
-  ticket += '?? *Delivery Location:* ' + address + ', ' + emirate + ', UAE\n';
+  let ticket = '🕯️ *CONFIRMACIÓN DE PEDIDO - JUMENIA CANDLES* 🕯️\n';
+  ticket += '📋 *Nº Pedido:* #' + refNumber + '\n';
+  ticket += '📅 *Fecha:* ' + new Date().toLocaleDateString('es-ES') + '\n';
+  ticket += '━━━━━━━━━━━━━━━━━━━━━━\n';
+  ticket += '👤 *Cliente:* ' + name + '\n';
+  ticket += '📱 *WhatsApp / Teléfono:* ' + phone + '\n';
+  ticket += '📍 *Dirección de Entrega:* ' + address + ', ' + emirate + ', UAE\n';
   if (notes) {
-    ticket += '?? *Gift/Delivery Notes:* ' + notes + '\n';
+    ticket += '📝 *Dedicatoria / Notas:* ' + notes + '\n';
   }
-  ticket += '??????????????????????\n';
-  ticket += '??? *PURCHASED ITEMS:*\n';
+  ticket += '━━━━━━━━━━━━━━━━━━━━━━\n';
+  ticket += '🛍️ *PRODUCTOS SELECCIONADOS:*\n';
 
   cart.forEach(item => {
-    ticket += '? ' + item.qty + 'x ' + item.name + ' (' + item.price + ' AED each) = *' + (item.price * item.qty) + ' AED*\n';
+    ticket += '• ' + item.qty + 'x ' + item.name + ' (' + item.price + ' AED c/u) = *' + (item.price * item.qty) + ' AED*\n';
   });
 
-  ticket += '??????????????????????\n';
-  ticket += '?? *Subtotal:* ' + subtotal + ' AED\n';
-  ticket += '?? *UAE Shipping:* ' + (delivery === 0 ? 'FREE' : delivery + ' AED') + '\n';
-  ticket += '? *TOTAL PAYABLE:* ' + total + ' AED\n';
-  ticket += '?? *Payment Method:* Cash on Delivery / Instant Bank Transfer\n';
-  ticket += '??????????????????????\n';
-  ticket += 'Hello Jumenia team, I would like to confirm this order. Thank you!';
+  ticket += '━━━━━━━━━━━━━━━━━━━━━━\n';
+  ticket += '💵 *Subtotal:* ' + subtotal + ' AED\n';
+  ticket += '🚚 *Envío UAE:* ' + (delivery === 0 ? 'GRATIS' : delivery + ' AED') + '\n';
+  ticket += '✨ *TOTAL A PAGAR:* ' + total + ' AED\n';
+  ticket += '💳 *Método de Pago:* Pago Contra Entrega / Transferencia Inmediata\n';
+  ticket += '━━━━━━━━━━━━━━━━━━━━━━\n';
+  ticket += '¡Hola equipo Jumenia! Deseo confirmar este pedido para entrega. Muchas gracias.';
 
   const encodedTicket = encodeURIComponent(ticket);
   const targetPhone = SITE_CONFIG.whatsappPhone || '971526680498';
@@ -563,23 +588,27 @@ function setup3DModal() {
   const modalStage = document.getElementById('modal-photo-stage');
   const modalImgCard = document.getElementById('modal-interactive-card');
   if (modalStage && modalImgCard) {
-    modalStage.addEventListener('mousemove', (e) => {
-      const rect = modalStage.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+    // Only attach interactive tilt on non-touch devices
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (!isTouch) {
+      modalStage.addEventListener('mousemove', (e) => {
+        const rect = modalStage.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
 
-      const rotateX = ((y - centerY) / centerY) * -18;
-      const rotateY = ((x - centerX) / centerX) * 18;
+        const rotateX = ((y - centerY) / centerY) * -18;
+        const rotateY = ((x - centerX) / centerX) * 18;
 
-      modalImgCard.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.05)';
-    });
+        modalImgCard.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.05)';
+      });
 
-    modalStage.addEventListener('mouseleave', () => {
-      modalImgCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-    });
+      modalStage.addEventListener('mouseleave', () => {
+        modalImgCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+      });
+    }
   }
 }
 
@@ -646,11 +675,34 @@ function setupMobileMenu() {
 }
 
 /* ----------------------------------------------------
-   Smooth 3D Card Tilt Effect on Real Product Photos
+   Smooth 3D Card Tilt Effect on Real Product Photos (Touchscreen Guard)
    ---------------------------------------------------- */
 function setupCardTiltEffect() {
+  // Detect touch screens or mobile viewport
+  const isTouchDevice = ('ontouchstart' in window) ||
+                        (navigator.maxTouchPoints > 0) ||
+                        (window.matchMedia && window.matchMedia('(hover: none)').matches) ||
+                        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+                        (window.innerWidth <= 1024);
+
   const cards = document.querySelectorAll('.product-card');
   cards.forEach(card => {
+    // Reset transform style completely
+    card.style.transform = '';
+
+    if (isTouchDevice) {
+      // Touchscreens: Ensure card NEVER gets stuck tilted
+      const resetTransform = () => {
+        card.style.transform = 'none';
+      };
+      card.addEventListener('touchstart', resetTransform, { passive: true });
+      card.addEventListener('touchend', resetTransform, { passive: true });
+      card.addEventListener('touchcancel', resetTransform, { passive: true });
+      card.addEventListener('click', resetTransform);
+      return;
+    }
+
+    // Desktop mouse devices only:
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -666,6 +718,10 @@ function setupCardTiltEffect() {
     });
 
     card.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0)';
+    });
+
+    card.addEventListener('click', () => {
       card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0)';
     });
   });

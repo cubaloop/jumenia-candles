@@ -363,9 +363,9 @@
   <div class="cart-drawer" id="cart-drawer">
     <div class="cart-drawer-header">
       <h3 class="cart-drawer-title">
-        <i class="fas fa-shopping-bag" style="color: var(--color-accent-dark);"></i> Your Shopping Bag
+        <i class="fas fa-shopping-bag" style="color: var(--color-accent-dark);"></i> Tu Carrito
       </h3>
-      <button class="icon-btn" id="close-cart-btn" style="width: 34px; height: 34px;">
+      <button class="icon-btn" id="close-cart-btn" style="width: 34px; height: 34px;" aria-label="Cerrar Carrito">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -380,16 +380,16 @@
         <span id="cart-subtotal" style="font-weight: 600; color: var(--color-primary);">0 AED</span>
       </div>
       <div class="cart-summary-row">
-        <span>UAE Shipping</span>
+        <span>Envío a UAE</span>
         <span id="cart-delivery" style="font-weight: 600; color: var(--color-accent-dark);">0 AED</span>
       </div>
       <div class="cart-total-row">
-        <span>Total</span>
+        <span>Total a Pagar</span>
         <span id="cart-total">0 AED</span>
       </div>
 
       <button class="btn-whatsapp-checkout" id="proceed-checkout-btn">
-        <i class="fab fa-whatsapp" style="font-size: 1.25rem;"></i> Order via WhatsApp Ticket
+        <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i> Comprar / Confirmar Pedido por WhatsApp
       </button>
     </div>
   </div>
@@ -397,49 +397,49 @@
   <!-- WhatsApp Order Checkout Modal -->
   <div class="modal-overlay" id="checkout-modal">
     <div class="modal-container" style="max-width: 580px; padding: 2.5rem;">
-      <button class="modal-close-btn" id="close-checkout-btn">
+      <button class="modal-close-btn" id="close-checkout-btn" aria-label="Cerrar Modal">
         <i class="fas fa-times"></i>
       </button>
 
       <div style="text-align: center; margin-bottom: 1.75rem;">
         <i class="fab fa-whatsapp" style="font-size: 2.75rem; color: var(--color-whatsapp); margin-bottom: 0.5rem;"></i>
         <h3 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--color-primary); margin-bottom: 0.25rem;">
-          Confirm Order via WhatsApp
+          Confirmar Pedido por WhatsApp
         </h3>
         <p style="font-size: 0.85rem; color: var(--color-text-muted);">
-          Complete your delivery details below to generate your direct WhatsApp order ticket.
+          Completa tus datos de entrega para generar tu ticket directo a nuestro WhatsApp (+971 52668 0498).
         </p>
       </div>
 
       <!-- Order Summary Card -->
       <div style="background: var(--color-surface-alt); padding: 1rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; border: 1px solid var(--color-border);">
         <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.25rem;">
-          <span>Items Subtotal:</span>
+          <span>Subtotal de Productos:</span>
           <span id="checkout-summary-subtotal" style="font-weight: 600;">0 AED</span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
-          <span>UAE Delivery:</span>
+          <span>Envío UAE:</span>
           <span id="checkout-summary-delivery" style="font-weight: 600;">0 AED</span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; color: var(--color-primary); border-top: 1px dashed var(--color-border); padding-top: 0.5rem;">
-          <span>Total Payable:</span>
+          <span>Total a Pagar:</span>
           <span id="checkout-summary-total">0 AED</span>
         </div>
       </div>
 
       <form id="whatsapp-checkout-form" class="checkout-form">
         <div class="form-group">
-          <label for="cust-name">Full Name *</label>
-          <input type="text" id="cust-name" required placeholder="e.g. Fatima Al Mansoori" />
+          <label for="cust-name">Nombre Completo *</label>
+          <input type="text" id="cust-name" required placeholder="ej. Fatima Al Mansoori" />
         </div>
 
         <div class="form-group">
-          <label for="cust-phone">WhatsApp / Phone Number *</label>
-          <input type="tel" id="cust-phone" required placeholder="e.g. +971 50 123 4567" />
+          <label for="cust-phone">Teléfono / WhatsApp *</label>
+          <input type="tel" id="cust-phone" required placeholder="ej. +971 50 123 4567" />
         </div>
 
         <div class="form-group">
-          <label for="cust-emirate">Emirate (UAE) *</label>
+          <label for="cust-emirate">Emirato (UAE) *</label>
           <select id="cust-emirate" required>
             <option value="Dubai">Dubai</option>
             <option value="Abu Dhabi">Abu Dhabi</option>
@@ -452,17 +452,17 @@
         </div>
 
         <div class="form-group">
-          <label for="cust-address">Delivery Address (Street, Building/Villa #, Area) *</label>
-          <textarea id="cust-address" rows="2" required placeholder="e.g. Villa 14, Palm Jumeirah, Dubai"></textarea>
+          <label for="cust-address">Dirección de Entrega (Calle, Villa / Apto, Zona) *</label>
+          <textarea id="cust-address" rows="2" required placeholder="ej. Villa 14, Palm Jumeirah, Dubai"></textarea>
         </div>
 
         <div class="form-group">
-          <label for="cust-notes">Special Gift Note / Instructions (Optional)</label>
-          <input type="text" id="cust-notes" placeholder="e.g. Gift for Birthday / Leave at doorstep" />
+          <label for="cust-notes">Notas / Dedicatoria para Regalo (Opcional)</label>
+          <input type="text" id="cust-notes" placeholder="ej. Para regalo de cumpleaños / Dejar en puerta" />
         </div>
 
         <button type="submit" class="btn-whatsapp-checkout" style="margin-top: 1rem;">
-          <i class="fab fa-whatsapp"></i> Send Order to WhatsApp (+971 52668 0498)
+          <i class="fab fa-whatsapp" style="font-size: 1.25rem;"></i> Enviar Pedido a WhatsApp (+971 52668 0498)
         </button>
       </form>
     </div>
